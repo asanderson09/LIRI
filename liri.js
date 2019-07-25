@@ -3,14 +3,18 @@ require('dotenv').config();
 
 var axios = require("axios")
 // code required to import keys.js
-var Spotify = require("node-spotify-api"); 
-
 var keys = require('./keys.js');
 
 //defines Spotify
+var Spotify = require("node-spotify-api"); 
 
 // access key information
 var spotify = new Spotify(keys.spotify);
+
+// commands taken in by Liri from the command line/terminal
+var command = process.argv[2];
+// data to search for
+var dataToFind = process.argv.splice(3).join();
 
 function spotifySong(){ spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
     if (err) {
@@ -20,3 +24,4 @@ function spotifySong(){ spotify.search({ type: 'track', query: 'All the Small Th
   console.log(data); 
   })
 };
+console.log(dataToFind,);
