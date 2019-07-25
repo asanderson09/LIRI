@@ -16,6 +16,24 @@ var command = process.argv[2];
 // data to search for
 var dataToFind = process.argv.splice(3).join();
 
+switch (command) {
+    case 'concert-this':
+        concertThis(command);
+        break;
+    case 'spotify-this-song':
+        spotifySong(command);
+        break;
+    case 'movie-this':
+        movieThis(command);
+        break;
+    case 'do-what-it-says':
+        doIt(command);
+        break;        
+    default:
+        break;
+}
+
+
 function spotifySong(){ spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
