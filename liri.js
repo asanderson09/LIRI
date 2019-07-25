@@ -14,7 +14,7 @@ var spotify = new Spotify(keys.spotify);
 // commands taken in by Liri from the command line/terminal
 var command = process.argv[2];
 // data to search for
-var dataToFind = process.argv.splice(3).join();
+var dataToFind = process.argv.splice(3).join(' ');
 
 switch (command) {
     case 'concert-this':
@@ -38,10 +38,10 @@ function concertThis(dataToFind){
     .then(function(response){
         const concerts = response.data;
 
-        console.log(concerts);
+       // console.log(concerts);
 
         for(i=0; i<concerts.length; i++){
-            console.log(`Got Data back
+            console.log(`
            Venue Name: ${concerts[i].venue.name}
            Venue Location: ${concerts[i].venue.country}
            Date: ${concerts[i].date}`);
@@ -49,7 +49,7 @@ function concertThis(dataToFind){
     }).catch(function(err){
         console.log(err);
     })
-
+   // console.log(dataToFind)
 };
 
 
@@ -65,12 +65,11 @@ function concertThis(dataToFind){
 
 
 
-function spotifySong(){ spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
-    }
+// function spotifySong(dataToFind){ spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
+//     if (err) {
+//       return console.log('Error occurred: ' + err);
+//     }
    
-  console.log(data); 
-  })
-};
-console.log(dataToFind,);
+//   console.log(data); 
+//   })
+// };
