@@ -18,20 +18,51 @@ var dataToFind = process.argv.splice(3).join();
 
 switch (command) {
     case 'concert-this':
-        concertThis(command);
+        concertThis(dataToFind);
         break;
     case 'spotify-this-song':
-        spotifySong(command);
+        spotifySong(dataToFind);
         break;
     case 'movie-this':
-        movieThis(command);
+        movieThis(dataToFind);
         break;
     case 'do-what-it-says':
-        doIt(command);
+        doIt(dataToFind);
         break;        
     default:
         break;
 }
+
+function concertThis(dataToFind){
+    axios.get(`https://rest.bandsintown.com/artists/${dataToFind}/events?app_id=codingbootcamp`)
+    .then(function(response){
+        const concerts = response.data;
+
+        console.log(concerts);
+
+        for(i=0; i<concerts.length; i++){
+            console.log(`Got Data back
+           Venue Name: ${concerts[i].venue.name}
+           Venue Location: ${concerts[i].venue.country}
+           Date: ${concerts[i].date}`);
+        };
+    }).catch(function(err){
+        console.log(err);
+    })
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function spotifySong(){ spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
