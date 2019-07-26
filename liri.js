@@ -61,6 +61,11 @@ function concertThis(dataToFind) {
 
 // Movie this 
 function movieThis(dataToFind) {
+    if (process.argv[3]=== undefined){
+        dataToFind = "Mr. Nobody"
+    };
+    
+    
     // call to OMDB API,
     request(`http://www.omdbapi.com/?t=${dataToFind}&y=&plot=short&apikey=trilogy`, function (error, response, body) {
 
@@ -81,7 +86,8 @@ function movieThis(dataToFind) {
                 ~Language: ${result.Language}
                 ~Actors:  ${result.Actors}
 
-                ~Plot: ${result.Plot}`);
+                ~Plot: ${result.Plot}
+                `);
         } else {
             console.log(error);
         };
