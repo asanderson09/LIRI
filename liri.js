@@ -94,4 +94,22 @@ function movieThis(dataToFind) {
         })
     };
 
+// Spotify-this-song
 
+function spotifySong(dataToFind){
+    spotify.search({ type: 'track', query: dataToFind, limit:1 })
+  .then(function(response) {
+    let song = response;
+
+    console.log(`
+           ~~~~~~ Your Jam ~~~~~~
+        Artist: ${song.tracks.items[0].artists[0].name}
+        Song:   ${song.tracks.items[0].name}
+        Album: ${song.tracks.items[0].album.name}
+        Pre URL: ${song.tracks.items[0].external_urls.spotify}
+        `);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+}
