@@ -1,12 +1,16 @@
 // Code to read and set any environment variables with dotenv packages
 require('dotenv').config();
 
+var request = require("request");
+var moment = require("moment");
+var fs = require("fs");
 var axios = require("axios")
+
 // code required to import keys.js
 var keys = require('./keys.js');
 
 //defines Spotify
-var Spotify = require("node-spotify-api"); 
+var Spotify = require("node-spotify-api");
 
 // access key information
 var spotify = new Spotify(keys.spotify);
@@ -28,48 +32,58 @@ switch (command) {
         break;
     case 'do-what-it-says':
         doIt(dataToFind);
-        break;        
+        break;
     default:
         break;
 }
 
-function concertThis(dataToFind){
+// Concert this
+function concertThis(dataToFind) {
     axios.get(`https://rest.bandsintown.com/artists/${dataToFind}/events?app_id=codingbootcamp`)
-    .then(function(response){
-        const concerts = response.data;
+        .then(function (response) {
+            const concerts = response.data;
 
-       // console.log(concerts);
+            // console.log(concerts);
 
-        for(i=0; i<concerts.length; i++){
-            console.log(`
+            for (i = 0; i < concerts.length; i++) {
+                console.log(`
            Venue Name: ${concerts[i].venue.name}
            Venue Location: ${concerts[i].venue.country}
            Date: ${concerts[i].date}`);
-        };
-    }).catch(function(err){
-        console.log(err);
-    })
-   // console.log(dataToFind)
+            };
+        }).catch(function (err) {
+            console.log(err);
+        })
+    // console.log(dataToFind)
 };
 
 
 
+// Movie this 
+function movieThis(dataToFind) {
+    // call to OMDB API,
+    request(`http://www.omdbapi.com/?t=${dataToFind}&y=&plot=short&apikey=trilogy`, function (error, response, body) {
 
+        console.log(`
+        _________Movie-This__________
+        `);
+        if (!error) {
+            var result = JSON.parse(body)
+            console.log(`Title: ${result.Title}
+                ~Year: ${result.Year}
+                ~IMDB Rating: ${result.imdbRating}`);
+            if (result.Ratings.length > 1) {
+                console.log(`                ~Rotten Tomatoes Score: ${result.Ratings[1].Value}`)
+            } else {
+                console.log(`No Rotten Tomatoes Score`);
+            }
+            console.log(`                ~Country:  ${result.Country}
+                ~Language: ${result.Language}
+                ~Actors:  ${result.Actors}
 
-
-
-
-
-
-
-
-
-
-// function spotifySong(dataToFind){ spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-//     if (err) {
-//       return console.log('Error occurred: ' + err);
-//     }
-   
-//   console.log(data); 
-//   })
-// };
+                ~Plot: ${result.Plot}`);
+        } else {
+            console.log(error);
+        };
+    })
+};
