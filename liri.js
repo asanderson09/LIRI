@@ -49,7 +49,7 @@ function concertThis(dataToFind) {
                 console.log(`
            Venue Name: ${concerts[i].venue.name}
            Venue Location: ${concerts[i].venue.country}
-           Date: ${concerts[i].date}`);
+           Date: ${moment(concerts[i].datetime).format('L')}`);
             };
         }).catch(function (err) {
             console.log(err);
@@ -58,23 +58,24 @@ function concertThis(dataToFind) {
 };
 
 
-
 // Movie this 
 function movieThis(dataToFind) {
-    if (process.argv[3]=== undefined){
+    console.log(dataToFind);
+    // default movie to search if blank command line 
+    if (dataToFind === '') {
         dataToFind = "Mr. Nobody"
     };
-    
-    
-    // call to OMDB API,
-    request(`http://www.omdbapi.com/?t=${dataToFind}&y=&plot=short&apikey=trilogy`, function (error, response, body) {
 
-        console.log(`
-        _________Movie-This__________
-        `);
-        if (!error) {
-            var result = JSON.parse(body)
-            console.log(`Title: ${result.Title}
+    // call to OMDB API,
+    axios.get(`http://www.omdbapi.com/?t=${dataToFind}&y=&plot=short&apikey=trilogy`)
+        .then(function (response) {
+            const result = response.data;
+            // console.log(result);
+            console.log(`
+            _________Movie-This__________
+            `)
+            console.log(`
+                Title: ${result.Title}
                 ~Year: ${result.Year}
                 ~IMDB Rating: ${result.imdbRating}`);
             if (result.Ratings.length > 1) {
@@ -88,8 +89,9 @@ function movieThis(dataToFind) {
 
                 ~Plot: ${result.Plot}
                 `);
-        } else {
-            console.log(error);
-        };
-    })
-};
+        }).catch(function (err) {
+            console.log(err);
+        })
+    };
+
+
