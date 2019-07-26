@@ -31,7 +31,7 @@ switch (command) {
         movieThis(dataToFind);
         break;
     case 'do-what-it-says':
-        doIt(dataToFind);
+        doIt();
         break;
     default:
         break;
@@ -92,24 +92,44 @@ function movieThis(dataToFind) {
         }).catch(function (err) {
             console.log(err);
         })
-    };
+};
 
 // Spotify-this-song
 
-function spotifySong(dataToFind){
-    spotify.search({ type: 'track', query: dataToFind, limit:1 })
-  .then(function(response) {
-    let song = response;
+function spotifySong(dataToFind) {
+    if(dataToFind === ''){
+        dataToFind = 'Ace of Base'
+    };
+    spotify.search({ type: 'track', query: dataToFind, limit: 1 })
+        .then(function (response) {
+            let song = response;
 
-    console.log(`
+            console.log(`
            ~~~~~~ Your Jam ~~~~~~
         Artist: ${song.tracks.items[0].artists[0].name}
         Song:   ${song.tracks.items[0].name}
         Album: ${song.tracks.items[0].album.name}
         Pre URL: ${song.tracks.items[0].external_urls.spotify}
         `);
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+};
+
+// Do-What-It-Says
+function doIt() {
+    fs.readFile("random.txt", "utf8", function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+        var dataArr = data.split(",");
+
+        // Gets "I Want It That Way" from random.txt
+        if (dataArr[0] === "spotify-this-song") {
+            var songTxt = dataArr[1].trim();
+            spotifySong(songTxt);
+        }
+
+    });
 }
